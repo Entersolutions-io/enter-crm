@@ -17,42 +17,42 @@ const features = [
     description:
       "One line of code to track every visitor interaction. Page views, clicks, purchases — all in real-time.",
     icon: Activity,
-    size: "wide" as const,
+    wide: true,
   },
   {
-    title: "Customer 360°",
+    title: "Customer 360",
     description:
       "Unified customer profiles with complete interaction history, preferences, and engagement scores.",
     icon: Users,
-    size: "normal" as const,
+    wide: false,
   },
   {
     title: "Smart Segments",
     description:
       "AI-powered RFM analysis creates 125+ dynamic customer segments automatically.",
     icon: BarChart3,
-    size: "normal" as const,
+    wide: false,
   },
   {
     title: "Automation Engine",
     description:
       "Build trigger-based workflows that react to customer behavior. If this, then that — at scale.",
     icon: Zap,
-    size: "wide" as const,
+    wide: false,
   },
   {
     title: "Real-time Analytics",
     description:
       "Live dashboards with revenue tracking, funnel analysis, and cohort breakdowns.",
     icon: LineChart,
-    size: "normal" as const,
+    wide: false,
   },
   {
     title: "Multi-Channel Outreach",
     description:
       "Email, SMS, and call lists — reach your customers on the right channel at the right time.",
     icon: Mail,
-    size: "normal" as const,
+    wide: true,
   },
 ];
 
@@ -62,15 +62,11 @@ export function Features() {
       <div className="mx-auto max-w-6xl">
         <ScrollReveal>
           <div className="text-center mb-16">
-            <p className="text-sm text-indigo-400 font-semibold tracking-wide uppercase mb-3">
+            <p className="text-sm text-[#6366F1] font-semibold tracking-wide uppercase mb-3">
               Features
             </p>
-            <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
-              Everything you need to{" "}
-              <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-                understand
-              </span>{" "}
-              your customers
+            <h2 className="text-3xl md:text-5xl font-bold text-[#FAFAFA] tracking-tight" style={{ letterSpacing: "-0.02em" }}>
+              Everything you need to understand your customers
             </h2>
           </div>
         </ScrollReveal>
@@ -81,16 +77,14 @@ export function Features() {
             <ScrollReveal
               key={feature.title}
               delay={i * 0.1}
-              className={
-                feature.size === "wide" ? "md:col-span-2" : "md:col-span-1"
-              }
+              className={feature.wide ? "lg:col-span-2" : "lg:col-span-1"}
             >
               <SpotlightCard className="h-full">
-                <feature.icon className="h-10 w-10 text-indigo-400 mb-4" />
-                <h3 className="text-lg font-semibold text-white mb-2">
+                <feature.icon className="h-10 w-10 text-[#6366F1] mb-4" strokeWidth={1.5} />
+                <h3 className="text-lg font-semibold text-[#FAFAFA] mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-sm text-white/50 leading-relaxed">
+                <p className="text-sm text-[#A1A1AA] leading-relaxed">
                   {feature.description}
                 </p>
               </SpotlightCard>

@@ -95,16 +95,16 @@
   --secondary-foreground: #FAFAFA;
   --muted: #1F1F23;
   --muted-foreground: #A1A1AA;
-  --accent: #8B5CF6;
+  --accent: #6366F1;
   --accent-foreground: #FAFAFA;
   --destructive: #EF4444;
   --border: #1F1F23;
   --input: #1F1F23;
   --ring: #6366F1;
   --chart-1: #6366F1;
-  --chart-2: #8B5CF6;
+  --chart-2: #818CF8;
   --chart-3: #06B6D4;
-  --chart-4: #A78BFA;
+  --chart-4: #A5B4FC;
   --chart-5: #22D3EE;
   --sidebar: #0A0A0B;
   --sidebar-foreground: #FAFAFA;
@@ -128,15 +128,22 @@
   }
 }
 
-@keyframes scroll {
+/* Infinite scroll carousel */
+@keyframes scroll-left {
   from {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-100%);
+    transform: translateX(-50%);
   }
 }
 
-.animate-scroll {
-  animation: scroll 30s linear infinite;
+.animate-scroll-left {
+  animation: scroll-left 25s linear infinite;
+}
+
+/* Dot grid pattern */
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
 }

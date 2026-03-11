@@ -1,14 +1,13 @@
 "use client";
 
-import { ScrollReveal } from "@/components/effects/scroll-reveal";
-import { SpotlightCard } from "@/components/effects/spotlight-card";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import { Code2, BrainCircuit, Send } from "lucide-react";
 
 const steps = [
   {
     step: "01",
     title: "Embed",
-    subtitle: "Add one line of code",
     description:
       "Drop our lightweight tracking snippet into your website or connect via API. Start collecting behavioral data in minutes.",
     icon: Code2,
@@ -16,7 +15,6 @@ const steps = [
   {
     step: "02",
     title: "Analyze",
-    subtitle: "AI-powered insights",
     description:
       "Our engine processes every interaction in real-time. RFM scoring, lifetime value predictions, and behavioral patterns — automatically.",
     icon: BrainCircuit,
@@ -24,58 +22,80 @@ const steps = [
   {
     step: "03",
     title: "Act",
-    subtitle: "Automate outreach",
     description:
       "Trigger personalized emails, SMS, or add customers to call lists based on their behavior and segment scores.",
     icon: Send,
   },
 ];
 
-export function HowItWorks() {
+function StepCard({ step, index }: { step: typeof steps[number]; index: number }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
   return (
-    <section
-      id="how-it-works"
-      className="relative py-32 px-6 bg-gradient-to-b from-transparent via-indigo-500/[0.02] to-transparent"
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: -60, rotate: -3 }}
+      animate={
+        isInView
+          ? { opacity: 1, x: 0, rotate: 0 }
+          : { opacity: 0, x: -60, rotate: -3 }
+      }
+      transition={{
+        duration: 0.7,
+        delay: index * 0.15,
+        ease: [0.25, 0.4, 0.25, 1],
+      }}
+      className="relative rounded-2xl border border-white/[0.06] bg-[#111113] p-8"
     >
-      <div className="mx-auto max-w-6xl">
-        <ScrollReveal>
-          <div className="text-center mb-16">
-            <p className="text-sm text-indigo-400 font-semibold tracking-wide uppercase mb-3">
-              How It Works
-            </p>
-            <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
-              Three steps to{" "}
-              <span className="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-                customer intelligence
-              </span>
-            </h2>
+      <div className="flex items-start gap-5">
+        {/* Step number circle */}
+        <div className="shrink-0 flex items-center justify-center h-12 w-12 rounded-full border border-[#6366F1]/30">
+          <span className="text-sm font-bold text-[#6366F1]">{step.step}</span>
+        </div>
+
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-3">
+            <step.icon className="h-5 w-5 text-[#6366F1]" strokeWidth={1.5} />
+            <h3 className="text-xl font-semibold text-[#FAFAFA]">{step.title}</h3>
           </div>
-        </ScrollReveal>
+          <p className="text-sm text-[#A1A1AA] leading-relaxed">
+            {step.description}
+          </p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+export function HowItWorks() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <section id="how-it-works" className="relative py-32 px-6">
+      <div className="mx-auto max-w-3xl">
+        <motion.div
+          ref={ref}
+          initial={{ opacity: 0, y: 60 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
+          transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
+          className="text-center mb-16"
+        >
+          <p className="text-sm text-[#6366F1] font-semibold tracking-wide uppercase mb-3">
+            How It Works
+          </p>
+          <h2
+            className="text-3xl md:text-5xl font-bold text-[#FAFAFA] tracking-tight"
+            style={{ letterSpacing: "-0.02em" }}
+          >
+            Three steps to customer intelligence
+          </h2>
+        </motion.div>
+
+        <div className="flex flex-col gap-6">
           {steps.map((step, i) => (
-            <ScrollReveal key={step.step} delay={i * 0.15}>
-              <SpotlightCard className="h-full text-center">
-                {/* Step number */}
-                <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-indigo-500/10 border border-indigo-500/20 mb-6">
-                  <span className="text-sm font-bold text-indigo-400">
-                    {step.step}
-                  </span>
-                </div>
-
-                {/* Icon */}
-                <step.icon className="h-12 w-12 text-indigo-400/60 mx-auto mb-4" />
-
-                {/* Content */}
-                <h3 className="text-xl font-bold text-white mb-1">
-                  {step.title}
-                </h3>
-                <p className="text-sm text-indigo-400 mb-3">{step.subtitle}</p>
-                <p className="text-sm text-white/50 leading-relaxed">
-                  {step.description}
-                </p>
-              </SpotlightCard>
-            </ScrollReveal>
+            <StepCard key={step.step} step={step} index={i} />
           ))}
         </div>
       </div>

@@ -35,7 +35,7 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
-              <h3 className="text-sm font-semibold text-white mb-4">
+              <h3 className="text-sm font-semibold text-[#FAFAFA] mb-4">
                 {category}
               </h3>
               <ul className="space-y-3">
@@ -43,7 +43,7 @@ export function Footer() {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-sm text-white/40 hover:text-white/80 transition-colors duration-200"
+                      className="text-sm text-[#71717A] hover:text-[#A1A1AA] transition-colors duration-200"
                     >
                       {link.name}
                     </Link>
@@ -57,22 +57,19 @@ export function Footer() {
         {/* Bottom */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8 border-t border-white/[0.06]">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-md bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-              <span className="text-white font-bold text-xs">E</span>
-            </div>
-            <span className="text-sm text-white/40">
+            <span className="text-sm text-[#71717A]">
               This website is a product of{" "}
               <a
                 href="https://entersolutions.io"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-indigo-400 hover:text-indigo-300 transition-colors"
+                className="text-[#6366F1] hover:text-[#818CF8] transition-colors"
               >
                 EnterSolutions
               </a>
             </span>
           </div>
-          <p className="text-sm text-white/30">
+          <p className="text-sm text-[#71717A]/60">
             &copy; {new Date().getFullYear()} EnterSolutions. All rights
             reserved.
           </p>
