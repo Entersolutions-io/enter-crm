@@ -8,7 +8,7 @@ import { TechStack } from "@/components/marketing/tech-stack";
 import { Features } from "@/components/marketing/features";
 import { HowItWorks } from "@/components/marketing/how-it-works";
 import { DemoPreview } from "@/components/marketing/demo-preview";
-import { Pricing } from "@/components/marketing/pricing";
+import { ContactForm } from "@/components/marketing/contact-form";
 import { CTASection } from "@/components/marketing/cta-section";
 import { Footer } from "@/components/layout/footer";
 
@@ -16,7 +16,6 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Match the loading screen total duration (~2.2s)
     const timer = setTimeout(() => setLoading(false), 2200);
     return () => clearTimeout(timer);
   }, []);
@@ -33,7 +32,7 @@ export default function Home() {
         <Features />
         <HowItWorks />
         <DemoPreview />
-        <Pricing />
+        <ContactForm />
         <CTASection />
         <Footer />
       </main>

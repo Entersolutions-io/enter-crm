@@ -12,13 +12,11 @@ const navLinks = [
 ];
 
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0;
-    setScrolled(latest > 50);
     setHidden(latest > previous && latest > 200);
   });
 
@@ -28,13 +26,7 @@ export function Navbar() {
       animate={{ y: hidden ? -100 : 0 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
-      <nav
-        className={`flex items-center justify-between w-full max-w-6xl rounded-2xl px-6 py-3 transition-all duration-300 ${
-          scrolled
-            ? "bg-[#0A0A0B]/70 backdrop-blur-xl border border-white/[0.06] shadow-lg shadow-black/20"
-            : "bg-transparent"
-        }`}
-      >
+      <nav className="flex items-center justify-between w-full max-w-6xl rounded-2xl px-6 py-3 bg-[#0A0A0B]/80 backdrop-blur-xl border border-white/[0.06]">
         <Link href="/" className="flex items-center gap-2">
           <span className="text-white font-semibold text-lg tracking-tight">
             EnterCRM
