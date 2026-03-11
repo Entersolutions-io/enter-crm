@@ -25,6 +25,16 @@ class Campaign extends Model
         'body_text',
         'settings',
         'scheduled_at',
+        'started_at',
+        'completed_at',
+        'total_recipients',
+        'total_sent',
+        'total_delivered',
+        'total_opened',
+        'total_clicked',
+        'total_bounced',
+        'total_unsubscribed',
+        'total_failed',
         'created_by',
     ];
 

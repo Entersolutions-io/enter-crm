@@ -1,3 +1,5 @@
+import { getToken } from "@/lib/auth";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
 type FetchOptions = RequestInit & {
@@ -9,12 +11,13 @@ export async function api<T = unknown>(
   options: FetchOptions = {}
 ): Promise<T> {
   const { token, headers, ...rest } = options;
+  const authToken = token || getToken();
 
   const res = await fetch(`${API_URL}${path}`, {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
       ...headers,
     },
     ...rest,

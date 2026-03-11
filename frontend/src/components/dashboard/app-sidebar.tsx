@@ -81,7 +81,7 @@ function NavGroup({ label, items, pathname }: { label: string; items: typeof mai
   );
 }
 
-export function AppSidebar() {
+export function AppSidebar({ onSignOut }: { onSignOut?: () => void }) {
   const pathname = usePathname();
 
   return (
@@ -103,7 +103,10 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t border-[#1F1F23] p-4">
-        <button className="flex items-center gap-3 text-sm text-[#71717A] hover:text-[#A1A1AA] transition-colors w-full px-2 py-1.5">
+        <button
+          onClick={onSignOut}
+          className="flex items-center gap-3 text-sm text-[#71717A] hover:text-[#A1A1AA] transition-colors w-full px-2 py-1.5"
+        >
           <LogOut className="h-[18px] w-[18px]" strokeWidth={1.5} />
           <span>Sign Out</span>
         </button>
