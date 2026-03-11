@@ -9,7 +9,6 @@ import { Features } from "@/components/marketing/features";
 import { HowItWorks } from "@/components/marketing/how-it-works";
 import { DemoPreview } from "@/components/marketing/demo-preview";
 import { ContactForm } from "@/components/marketing/contact-form";
-import { CTASection } from "@/components/marketing/cta-section";
 import { Footer } from "@/components/layout/footer";
 
 export default function Home() {
@@ -33,7 +32,6 @@ export default function Home() {
         <HowItWorks />
         <DemoPreview />
         <ContactForm />
-        <CTASection />
         <Footer />
       </main>
     </>

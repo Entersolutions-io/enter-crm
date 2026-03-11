@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Play } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const headingLines = [
   "Know Your Customers.",
@@ -40,10 +40,8 @@ const fadeUp = {
 export function Hero() {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
-      {/* Dot grid background */}
       <div className="absolute inset-0 dot-grid opacity-40" />
       <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0B] via-transparent to-[#0A0A0B]" />
-      {/* Subtle radial fade at edges */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,#0A0A0B_80%)]" />
 
       <motion.div
@@ -52,7 +50,6 @@ export function Hero() {
         initial="hidden"
         animate="visible"
       >
-        {/* Heading */}
         <div className="mb-6">
           {headingLines.map((line, i) => (
             <motion.h1
@@ -66,7 +63,6 @@ export function Hero() {
           ))}
         </div>
 
-        {/* Subtitle */}
         <motion.p
           variants={fadeUp}
           className="max-w-2xl mx-auto text-lg text-[#A1A1AA] font-normal leading-relaxed"
@@ -75,23 +71,22 @@ export function Hero() {
           multi-channel automation — all in one platform.
         </motion.p>
 
-        {/* Buttons */}
         <motion.div
           variants={fadeUp}
           className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <Link
-            href="/register"
-            className="inline-flex items-center justify-center px-8 py-3.5 text-sm font-semibold text-white rounded-xl bg-[#6366F1] hover:bg-[#5558E6] transition-colors duration-200"
+            href="#contact"
+            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-semibold text-white rounded-xl bg-[#6366F1] hover:bg-[#5558E6] transition-colors duration-200"
           >
-            Start Free Trial
+            Get Started
+            <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
             href="/demo"
             className="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-medium text-[#A1A1AA] rounded-xl border border-white/[0.1] hover:bg-white/[0.04] hover:text-white transition-all duration-200"
           >
-            <Play className="h-4 w-4" />
-            Watch Demo
+            Try Demo
           </Link>
         </motion.div>
       </motion.div>
