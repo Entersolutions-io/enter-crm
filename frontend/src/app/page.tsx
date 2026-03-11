@@ -6,6 +6,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Hero } from "@/components/marketing/hero";
 import { TechStack } from "@/components/marketing/tech-stack";
 import { Features } from "@/components/marketing/features";
+import { BeforeAfter } from "@/components/marketing/before-after";
 import { HowItWorks } from "@/components/marketing/how-it-works";
 import { DemoPreview } from "@/components/marketing/demo-preview";
 import { ContactForm } from "@/components/marketing/contact-form";
@@ -29,6 +30,7 @@ export default function Home() {
         <Hero />
         <TechStack />
         <Features />
+        <BeforeAfter />
         <HowItWorks />
         <DemoPreview />
         <ContactForm />
