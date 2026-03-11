@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Github, Linkedin, Twitter, Mail, MapPin, Globe } from "lucide-react";
+import { Github, Mail, MapPin, Globe } from "lucide-react";
 
 const footerLinks = {
   Product: [
@@ -31,8 +31,6 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { icon: Twitter, href: "https://twitter.com/entersolutions", label: "Twitter" },
-  { icon: Linkedin, href: "https://linkedin.com/company/entersolutions", label: "LinkedIn" },
   { icon: Github, href: "https://github.com/Entersolutions-io", label: "GitHub" },
 ];
 

@@ -30,8 +30,8 @@ export default function Home() {
         <Hero />
         <TechStack />
         <Features />
-        <BeforeAfter />
         <HowItWorks />
+        <BeforeAfter />
         <DemoPreview />
         <ContactForm />
         <Footer />
