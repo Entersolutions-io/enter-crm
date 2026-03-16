@@ -150,7 +150,7 @@ export default function ApiReferencePage() {
               <p className="text-xs font-medium text-[#52525B] uppercase tracking-wide mb-1.5">
                 {t("API Key (server-to-server)", "API Ključ (server-prema-serveru)")}
               </p>
-              <CodeBlock>{`X-API-Key: eck_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0`}</CodeBlock>
+              <CodeBlock>{`X-API-Key: eck_your_api_key_here`}</CodeBlock>
             </div>
           </div>
         </div>
@@ -362,7 +362,7 @@ export default function ApiReferencePage() {
           descEn="Track a custom event for a customer. Use your API key for server-side event tracking."
           descHr="Pratite prilagođeni događaj za korisnika. Koristite API ključ za praćenje događaja na strani servera."
           curl={`curl -X POST https://api.entercrm.io/v1/track/event \\
-  -H "X-API-Key: eck_a1b2c3d4e5f6..." \\
+  -H "X-API-Key: eck_your_api_key_here" \\
   -H "Content-Type: application/json" \\
   -d '{
     "customer_email": "ana.kovac@example.com",
@@ -388,7 +388,7 @@ export default function ApiReferencePage() {
           descEn="Track a pageview event. Usually sent automatically by the JS tracking snippet."
           descHr="Pratite događaj pregleda stranice. Obično se automatski šalje JS snippetom za praćenje."
           curl={`curl -X POST https://api.entercrm.io/v1/track/pageview \\
-  -H "X-API-Key: eck_a1b2c3d4e5f6..." \\
+  -H "X-API-Key: eck_your_api_key_here" \\
   -H "Content-Type: application/json" \\
   -d '{
     "customer_email": "ana.kovac@example.com",
@@ -650,7 +650,7 @@ export default function ApiReferencePage() {
     {
       "id": 1,
       "name": "Production Server",
-      "key": "eck_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
+      "key": "eck_your_api_key_here",
       "last_used_at": "2026-03-15T18:30:00Z",
       "created_at": "2026-01-01T00:00:00Z"
     }
@@ -671,7 +671,7 @@ export default function ApiReferencePage() {
           response={`{
   "id": 2,
   "name": "Staging Server",
-  "key": "eck_z9y8x7w6v5u4t3s2r1q0p9o8n7m6l5k4j3i2h1",
+  "key": "eck_your_api_key_here",
   "created_at": "2026-03-16T12:30:00Z",
   "note": "This is the only time the full key will be shown."
 }`}
