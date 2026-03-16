@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ScrollReveal } from "@/components/effects/scroll-reveal";
+import { useI18n } from "@/lib/i18n";
 import {
   Code2,
   BrainCircuit,
@@ -16,6 +18,13 @@ import {
   Zap,
   Shield,
 } from "lucide-react";
+
+const stepImages = [
+  "/images/how-collect.webp",
+  "/images/how-analyze.webp",
+  "/images/how-act.webp",
+  "/images/how-optimize.webp",
+];
 
 const steps = [
   {
@@ -54,6 +63,7 @@ const steps = [
 
 export function HowItWorks() {
   const [activeTab, setActiveTab] = useState(0);
+  const { t } = useI18n();
 
   return (
     <section id="how-it-works" className="relative py-24 px-6">
@@ -61,13 +71,13 @@ export function HowItWorks() {
         <ScrollReveal>
           <div className="text-center mb-16">
             <p className="text-sm text-[#6366F1] font-semibold tracking-wide uppercase mb-3">
-              How It Works
+              {t("How It Works", "Kako radi")}
             </p>
             <h2
               className="text-3xl md:text-4xl font-semibold text-[#FAFAFA] tracking-tight"
               style={{ letterSpacing: "-0.02em" }}
             >
-              From data to action
+              {t("From data to action", "Od podataka do akcije")}
             </h2>
           </div>
         </ScrollReveal>
@@ -137,6 +147,25 @@ export function HowItWorks() {
                   transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
                   className="space-y-4"
                 >
+                  {/* Step illustration */}
+                  <div className="relative h-40 md:h-48 rounded-2xl overflow-hidden border border-white/[0.06] bg-[#0A0A0B] mb-6">
+                    <Image
+                      src={stepImages[activeTab]}
+                      alt={steps[activeTab].label}
+                      fill
+                      className="object-cover opacity-70"
+                      draggable={false}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0B] via-transparent to-transparent" />
+                    <div className="absolute bottom-4 left-5">
+                      <span className="text-xs font-bold uppercase tracking-widest text-[#6366F1]">
+                        Step {activeTab + 1}
+                      </span>
+                      <h3 className="text-xl font-bold text-[#FAFAFA] mt-0.5">
+                        {steps[activeTab].label}
+                      </h3>
+                    </div>
+                  </div>
                   {steps[activeTab].items.map((item, idx) => (
                     <motion.div
                       key={item.title}

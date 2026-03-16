@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useInView } from "framer-motion";
+import { useI18n } from "@/lib/i18n";
 
 function StatBlock({ label, value, change }: { label: string; value: string; change: string }) {
   return (
@@ -51,11 +53,23 @@ function MiniTable() {
 }
 
 export function DemoPreview() {
+  const { t } = useI18n();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
     <section className="relative py-32 px-6">
+      {/* Background gradient decoration */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none -z-10">
+        <Image
+          src="/images/features-gradient.webp"
+          alt=""
+          width={900}
+          height={600}
+          className="w-[700px] opacity-20 blur-lg select-none"
+          draggable={false}
+        />
+      </div>
       <div className="mx-auto max-w-5xl">
         <motion.div
           ref={ref}
@@ -70,13 +84,13 @@ export function DemoPreview() {
           {/* Section heading */}
           <div className="text-center mb-12">
             <p className="text-sm text-[#6366F1] font-semibold tracking-wide uppercase mb-3">
-              Live Preview
+              {t("Live Preview", "Pregled uživo")}
             </p>
             <h2
               className="text-3xl md:text-5xl font-bold text-[#FAFAFA] tracking-tight"
               style={{ letterSpacing: "-0.02em" }}
             >
-              Your dashboard, at a glance
+              {t("Your dashboard, at a glance", "Vaša nadzorna ploča, na prvi pogled")}
             </h2>
           </div>
 
@@ -100,8 +114,8 @@ export function DemoPreview() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <StatBlock label="Total Visitors" value="9,095" change="+12.5% vs last week" />
                 <StatBlock label="Conversions" value="1,247" change="+8.3% vs last week" />
-                <StatBlock label="Revenue" value="$48.2K" change="+23.1% vs last week" />
-                <StatBlock label="Avg. LTV" value="$312" change="+5.7% vs last week" />
+                <StatBlock label="Revenue" value="€48.2K" change="+23.1% vs last week" />
+                <StatBlock label="Avg. LTV" value="€312" change="+5.7% vs last week" />
               </div>
 
               {/* Chart + Table row */}

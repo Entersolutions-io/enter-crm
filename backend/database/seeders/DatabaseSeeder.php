@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
     {
         // ── Demo user & tenant ─────────────────────────────
         $user = User::create([
-            'name' => 'Ulas Aydin',
+            'name' => 'John Doe',
             'email' => 'demo@entercrm.io',
             'password' => Hash::make('password'),
         ]);

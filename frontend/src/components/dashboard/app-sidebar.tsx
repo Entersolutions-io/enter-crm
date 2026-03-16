@@ -14,6 +14,7 @@ import {
   LogOut,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
 import {
   Sidebar,
   SidebarContent,
@@ -88,9 +89,7 @@ export function AppSidebar({ onSignOut }: { onSignOut?: () => void }) {
     <Sidebar className="border-r border-[#1F1F23] bg-[#0E0E10]">
       <SidebarHeader className="px-4 py-5">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <span className="text-white font-semibold text-lg tracking-tight">
-            EnterCRM
-          </span>
+          <Logo height={24} />
         </Link>
       </SidebarHeader>
 

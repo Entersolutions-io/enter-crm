@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   useReactTable,
   getCoreRowModel,
@@ -121,6 +122,7 @@ const columns: ColumnDef<Customer>[] = [
 ];
 
 export default function CustomersPage() {
+  const router = useRouter();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
@@ -215,6 +217,7 @@ export default function CustomersPage() {
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
+                  onClick={() => router.push(`/dashboard/customers/${row.original.id}`)}
                   className="border-[#1F1F23] hover:bg-[#1A1A1D] cursor-pointer transition-colors"
                 >
                   {row.getVisibleCells().map((cell) => (

@@ -1,17 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Sparkles } from "lucide-react";
 import { api } from "@/lib/api";
 import { setAuth } from "@/lib/auth";
+import { useI18n } from "@/lib/i18n";
+import { Logo } from "@/components/ui/logo";
 
 export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
+  const { t } = useI18n();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("demo") === "true") {
+      setEmail("demo@entercrm.io");
+      setPassword("password");
+    }
+  }, [searchParams]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -32,15 +52,20 @@ export default function LoginPage() {
     }
   }
 
+  function fillDemo() {
+    setEmail("demo@entercrm.io");
+    setPassword("password");
+  }
+
   return (
     <div className="min-h-screen bg-[#0A0A0B] flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/" className="text-white font-semibold text-xl tracking-tight">
-            EnterCRM
+          <Link href="/" className="inline-block">
+            <Logo height={28} />
           </Link>
-          <p className="text-sm text-[#71717A] mt-2">Sign in to your account</p>
+          <p className="text-sm text-[#71717A] mt-2">{t("Sign in to your account", "Prijavite se na svoj račun")}</p>
         </div>
 
         {/* Form */}
@@ -86,14 +111,24 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full h-10 rounded-lg bg-[#6366F1] hover:bg-[#5558E6] text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? t("Signing in...", "Prijava...") : t("Sign In", "Prijava")}
           </button>
         </form>
 
+        {/* Demo button */}
+        <button
+          onClick={fillDemo}
+          type="button"
+          className="w-full mt-3 h-10 rounded-lg border border-[#1F1F23] bg-[#111113] hover:border-[#6366F1]/30 hover:bg-[#6366F1]/5 text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-all flex items-center justify-center gap-2"
+        >
+          <Sparkles className="h-3.5 w-3.5 text-[#6366F1]" />
+          {t("Try Demo Account", "Isprobajte demo račun")}
+        </button>
+
         <p className="text-center text-sm text-[#71717A] mt-6">
-          Don&apos;t have an account?{" "}
-          <Link href="/register" className="text-[#6366F1] hover:text-[#818CF8] transition-colors">
-            Get Started
+          {t("Interested?", "Zainteresirani?")}{" "}
+          <Link href="/#contact" className="text-[#6366F1] hover:text-[#818CF8] transition-colors">
+            {t("Contact Us", "Kontaktirajte nas")}
           </Link>
         </p>
       </div>

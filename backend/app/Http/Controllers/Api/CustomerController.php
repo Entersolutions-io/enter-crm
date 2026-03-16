@@ -79,10 +79,30 @@ class CustomerController extends Controller
         }
 
         $customer->load(['segments', 'events' => function ($q) {
-            $q->orderByDesc('occurred_at')->limit(20);
+            $q->orderByDesc('occurred_at')->limit(50);
         }]);
 
-        return response()->json($customer);
+        // Campaign interactions (messages sent to this customer)
+        $campaignMessages = \App\Models\CampaignMessage::where('customer_id', $customer->id)
+            ->where('tenant_id', $tenant->id)
+            ->with('campaign:id,name,type,status')
+            ->orderByDesc('created_at')
+            ->limit(50)
+            ->get();
+
+        // Automation logs for this customer
+        $automationLogs = \App\Models\AutomationLog::where('customer_id', $customer->id)
+            ->where('tenant_id', $tenant->id)
+            ->with('automation:id,name')
+            ->orderByDesc('created_at')
+            ->limit(30)
+            ->get();
+
+        return response()->json([
+            'customer' => $customer,
+            'campaign_messages' => $campaignMessages,
+            'automation_logs' => $automationLogs,
+        ]);
     }
 
     public function update(Request $request, Customer $customer): JsonResponse

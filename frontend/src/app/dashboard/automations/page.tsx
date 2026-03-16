@@ -1,18 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Plus, Zap, Play, Pause, ArrowLeft } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Plus, Zap, Play, Pause, ArrowLeft, Loader2, Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { api } from "@/lib/api";
-import { AutomationBuilder } from "@/components/automation/automation-builder";
+import { AutomationBuilder, type AutomationBuilderRef } from "@/components/automation/automation-builder";
 
 interface Automation {
-  id: string;
+  id: number;
   name: string;
   trigger_type: string;
-  trigger_config: Record<string, unknown>;
+  trigger_config: Record<string, unknown> & {
+    flow_nodes?: Array<Record<string, unknown>>;
+    flow_edges?: Array<Record<string, unknown>>;
+  };
   is_active: boolean;
   last_triggered_at: string | null;
+  total_entered: number;
+  total_completed: number;
   created_at: string;
 }
 
@@ -21,21 +26,108 @@ export default function AutomationsPage() {
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState<"list" | "builder">("list");
   const [builderName, setBuilderName] = useState("New Automation");
+  const [editingAutomation, setEditingAutomation] = useState<Automation | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saved" | "error">("idle");
+  const builderRef = useRef<AutomationBuilderRef>(null);
 
-  useEffect(() => {
+  const fetchAutomations = () => {
+    setLoading(true);
     api<{ data: Automation[] }>("/automations")
       .then((res) => setAutomations(res.data))
       .catch(() => {})
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchAutomations();
   }, []);
 
+  const handleSave = async (activate = false) => {
+    const flow = builderRef.current?.getFlow();
+    if (!flow || flow.nodes.length === 0) return;
+
+    setSaving(true);
+    setSaveStatus("idle");
+
+    try {
+      let automationId = editingAutomation?.id;
+
+      // Create automation first if new
+      if (!automationId) {
+        const triggerNode = flow.nodes.find((n: Record<string, unknown>) => n.type === "trigger");
+        const triggerType = (triggerNode?.data as Record<string, unknown>)?.triggerType as string || "event";
+        const triggerTypeMap: Record<string, string> = {
+          customer_created: "event",
+          purchase_made: "event",
+          inactive_period: "event",
+          segment_entered: "segment_enter",
+          event_tracked: "event",
+          rfm_changed: "event",
+        };
+
+        const created = await api<Automation>("/automations", {
+          method: "POST",
+          body: JSON.stringify({
+            name: builderName,
+            trigger_type: triggerTypeMap[triggerType] || "event",
+            trigger_config: {},
+          }),
+        });
+        automationId = created.id;
+        setEditingAutomation(created);
+      }
+
+      // Save the design
+      await api(`/automations/${automationId}/design`, {
+        method: "POST",
+        body: JSON.stringify({
+          name: builderName,
+          nodes: flow.nodes,
+          edges: flow.edges,
+          activate,
+        }),
+      });
+
+      setSaveStatus("saved");
+      setTimeout(() => setSaveStatus("idle"), 2000);
+
+      if (activate) {
+        setMode("list");
+        fetchAutomations();
+      }
+    } catch {
+      setSaveStatus("error");
+      setTimeout(() => setSaveStatus("idle"), 3000);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const openBuilder = (automation?: Automation) => {
+    if (automation) {
+      setEditingAutomation(automation);
+      setBuilderName(automation.name);
+    } else {
+      setEditingAutomation(null);
+      setBuilderName("New Automation");
+    }
+    setMode("builder");
+  };
+
   if (mode === "builder") {
+    const initialNodes = editingAutomation?.trigger_config?.flow_nodes;
+    const initialEdges = editingAutomation?.trigger_config?.flow_edges;
+
     return (
       <div className="flex flex-col h-[calc(100vh-3.5rem)] -m-6">
         {/* Builder toolbar */}
         <div className="flex items-center gap-3 px-4 py-3 border-b border-[#1F1F23] bg-[#0A0A0B] shrink-0">
           <button
-            onClick={() => setMode("list")}
+            onClick={() => {
+              setMode("list");
+              fetchAutomations();
+            }}
             className="h-8 w-8 rounded-lg flex items-center justify-center text-[#71717A] hover:text-[#A1A1AA] hover:bg-[#1F1F23] transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -47,17 +139,41 @@ export default function AutomationsPage() {
             className="bg-transparent text-sm font-medium text-[#FAFAFA] focus:outline-none border-b border-transparent focus:border-[#6366F1] transition-colors px-1 py-0.5"
           />
           <div className="flex-1" />
-          <button className="h-8 px-3 rounded-lg border border-[#1F1F23] text-[#71717A] text-xs hover:text-[#A1A1AA] hover:border-[#2A2A2E] transition-colors">
+
+          {saveStatus === "saved" && (
+            <span className="flex items-center gap-1 text-xs text-emerald-400">
+              <Check className="h-3.5 w-3.5" /> Saved
+            </span>
+          )}
+          {saveStatus === "error" && (
+            <span className="text-xs text-red-400">Failed to save</span>
+          )}
+
+          <button
+            onClick={() => handleSave(false)}
+            disabled={saving}
+            className="h-8 px-3 rounded-lg border border-[#1F1F23] text-[#71717A] text-xs hover:text-[#A1A1AA] hover:border-[#2A2A2E] transition-colors disabled:opacity-50 flex items-center gap-1.5"
+          >
+            {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : null}
             Save Draft
           </button>
-          <button className="h-8 px-3 rounded-lg bg-[#6366F1] hover:bg-[#5558E6] text-white text-xs font-medium transition-colors">
+          <button
+            onClick={() => handleSave(true)}
+            disabled={saving}
+            className="h-8 px-3 rounded-lg bg-[#6366F1] hover:bg-[#5558E6] text-white text-xs font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5"
+          >
+            {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : null}
             Activate
           </button>
         </div>
 
         {/* Builder canvas */}
         <div className="flex-1 relative">
-          <AutomationBuilder />
+          <AutomationBuilder
+            ref={builderRef}
+            initialNodes={initialNodes as never[]}
+            initialEdges={initialEdges as never[]}
+          />
         </div>
       </div>
     );
@@ -75,10 +191,7 @@ export default function AutomationsPage() {
           </p>
         </div>
         <button
-          onClick={() => {
-            setBuilderName("New Automation");
-            setMode("builder");
-          }}
+          onClick={() => openBuilder()}
           className="h-9 px-4 rounded-lg bg-[#6366F1] hover:bg-[#5558E6] text-white text-sm font-medium transition-colors flex items-center gap-2"
         >
           <Plus className="h-4 w-4" />
@@ -103,10 +216,7 @@ export default function AutomationsPage() {
           <p className="text-sm text-[#71717A] mb-1">No automations yet</p>
           <p className="text-xs text-[#52525B] mb-4">Create workflows that trigger automatically</p>
           <button
-            onClick={() => {
-              setBuilderName("New Automation");
-              setMode("builder");
-            }}
+            onClick={() => openBuilder()}
             className="h-9 px-4 rounded-lg bg-[#6366F1] hover:bg-[#5558E6] text-white text-sm font-medium transition-colors flex items-center gap-2"
           >
             <Plus className="h-4 w-4" />
@@ -118,10 +228,7 @@ export default function AutomationsPage() {
           {automations.map((automation) => (
             <div
               key={automation.id}
-              onClick={() => {
-                setBuilderName(automation.name);
-                setMode("builder");
-              }}
+              onClick={() => openBuilder(automation)}
               className="rounded-xl border border-[#1F1F23] bg-[#111113] p-5 hover:border-[#2A2A2E] transition-colors cursor-pointer"
             >
               <div className="flex items-center justify-between">
@@ -141,6 +248,11 @@ export default function AutomationsPage() {
                     <h3 className="text-sm font-medium text-[#FAFAFA]">{automation.name}</h3>
                     <p className="text-xs text-[#52525B] mt-0.5">
                       Trigger: {automation.trigger_type.replace(/_/g, " ")}
+                      {automation.total_entered > 0 && (
+                        <span className="ml-2 text-[#71717A]">
+                          {automation.total_entered} entered
+                        </span>
+                      )}
                     </p>
                   </div>
                 </div>

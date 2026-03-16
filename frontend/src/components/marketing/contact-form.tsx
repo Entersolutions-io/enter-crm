@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { ScrollReveal } from "@/components/effects/scroll-reveal";
 import { Send, CheckCircle, AlertCircle } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 export function ContactForm() {
+  const { t } = useI18n();
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [form, setForm] = useState({
     name: "",
@@ -49,17 +51,19 @@ export function ContactForm() {
           <ScrollReveal>
             <div>
               <p className="text-sm text-[#6366F1] font-semibold tracking-wide uppercase mb-3">
-                Contact
+                {t("Contact", "Kontakt")}
               </p>
               <h2
                 className="text-3xl md:text-5xl font-semibold text-[#FAFAFA] tracking-tight mb-6"
                 style={{ letterSpacing: "-0.02em" }}
               >
-                Get in touch
+                {t("Get in touch", "Kontaktirajte nas")}
               </h2>
               <p className="text-[#A1A1AA] leading-relaxed mb-8 max-w-md">
-                Interested in Enter CRM for your business? Tell us about your
-                needs and our team will get back to you within 24 hours.
+                {t(
+                  "Interested in Enter CRM for your business? Tell us about your needs and our team will get back to you within 24 hours.",
+                  "Zainteresirani ste za Enter CRM za svoje poslovanje? Recite nam o svojim potrebama i naš tim će vam se javiti u roku od 24 sata."
+                )}
               </p>
 
               <div className="space-y-4">
@@ -68,7 +72,7 @@ export function ContactForm() {
                     <Send className="h-4 w-4 text-[#6366F1]" />
                   </div>
                   <div>
-                    <p className="text-sm text-[#71717A]">Email us at</p>
+                    <p className="text-sm text-[#71717A]">{t("Email us at", "Pošaljite nam email")}</p>
                     <a
                       href="mailto:info@entersolutions.io"
                       className="text-sm text-[#FAFAFA] hover:text-[#6366F1] transition-colors"
@@ -90,7 +94,7 @@ export function ContactForm() {
                     htmlFor="name"
                     className="block text-sm text-[#A1A1AA] mb-2"
                   >
-                    Full Name
+                    {t("Full Name", "Puno ime")}
                   </label>
                   <input
                     type="text"
@@ -108,7 +112,7 @@ export function ContactForm() {
                     htmlFor="email"
                     className="block text-sm text-[#A1A1AA] mb-2"
                   >
-                    Work Email
+                    {t("Work Email", "Poslovni email")}
                   </label>
                   <input
                     type="email"
@@ -128,7 +132,7 @@ export function ContactForm() {
                   htmlFor="company"
                   className="block text-sm text-[#A1A1AA] mb-2"
                 >
-                  Company
+                  {t("Company", "Tvrtka")}
                 </label>
                 <input
                   type="text"
@@ -146,7 +150,7 @@ export function ContactForm() {
                   htmlFor="message"
                   className="block text-sm text-[#A1A1AA] mb-2"
                 >
-                  Message
+                  {t("Message", "Poruka")}
                 </label>
                 <textarea
                   id="message"
@@ -166,10 +170,10 @@ export function ContactForm() {
                 className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-white rounded-xl bg-[#6366F1] hover:bg-[#5558E6] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               >
                 {status === "sending" ? (
-                  "Sending..."
+                  t("Sending...", "Slanje...")
                 ) : (
                   <>
-                    Send Message
+                    {t("Send Message", "Pošalji poruku")}
                     <Send className="h-4 w-4" />
                   </>
                 )}
@@ -178,13 +182,13 @@ export function ContactForm() {
               {status === "sent" && (
                 <div className="flex items-center gap-2 text-sm text-emerald-400">
                   <CheckCircle className="h-4 w-4" />
-                  Message sent! We&apos;ll get back to you soon.
+                  {t("Message sent! We'll get back to you soon.", "Poruka poslana! Javit ćemo vam se uskoro.")}
                 </div>
               )}
               {status === "error" && (
                 <div className="flex items-center gap-2 text-sm text-red-400">
                   <AlertCircle className="h-4 w-4" />
-                  Something went wrong. Please email us directly.
+                  {t("Something went wrong. Please email us directly.", "Nešto je pošlo po krivu. Molimo pošaljite nam email direktno.")}
                 </div>
               )}
             </form>

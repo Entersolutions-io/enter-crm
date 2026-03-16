@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import { Separator } from "@/components/ui/separator";
 import { useAuthGuard } from "@/hooks/use-auth-guard";
-import { getUser, clearAuth } from "@/lib/auth";
+import { clearAuth } from "@/lib/auth";
 
 export default function DashboardLayout({
   children,
@@ -15,21 +14,7 @@ export default function DashboardLayout({
 }) {
   const { checked, authenticated } = useAuthGuard();
   const router = useRouter();
-  const [initials, setInitials] = useState("U");
-
-  useEffect(() => {
-    const user = getUser();
-    if (user?.name) {
-      setInitials(
-        String(user.name)
-          .split(" ")
-          .map((n: string) => n[0])
-          .join("")
-          .toUpperCase()
-          .slice(0, 2)
-      );
-    }
-  }, [authenticated]);
+  const initials = "ES";
 
   function handleSignOut() {
     clearAuth();

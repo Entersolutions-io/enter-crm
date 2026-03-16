@@ -141,7 +141,7 @@ export function Pricing() {
 
                 {/* CTA */}
                 <Link
-                  href={plan.name === "Enterprise" ? "#contact" : "/register"}
+                  href="#contact"
                   className={cn(
                     "inline-flex items-center justify-center w-full py-3 text-sm font-semibold rounded-xl transition-colors duration-200",
                     plan.popular

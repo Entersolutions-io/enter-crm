@@ -1,40 +1,47 @@
+"use client";
+
 import Link from "next/link";
 import { Github, Mail, MapPin, Globe } from "lucide-react";
-
-const footerLinks = {
-  Product: [
-    { name: "Features", href: "#features" },
-    { name: "How It Works", href: "#how-it-works" },
-    { name: "Demo", href: "/demo" },
-    { name: "Changelog", href: "/changelog" },
-  ],
-  Resources: [
-    { name: "Documentation", href: "/docs" },
-    { name: "API Reference", href: "/docs/api" },
-    { name: "Developer Guide", href: "/docs/guide" },
-    { name: "Blog", href: "/blog" },
-    { name: "Status", href: "/status" },
-  ],
-  Company: [
-    { name: "About EnterSolutions", href: "https://entersolutions.io" },
-    { name: "Careers", href: "https://entersolutions.io/careers" },
-    { name: "Contact", href: "#contact" },
-    { name: "Partners", href: "/partners" },
-  ],
-  Legal: [
-    { name: "Privacy Policy", href: "/privacy" },
-    { name: "Terms of Service", href: "/terms" },
-    { name: "Cookie Policy", href: "/cookies" },
-    { name: "GDPR Compliance", href: "/gdpr" },
-    { name: "DPA", href: "/dpa" },
-  ],
-};
+import { useI18n } from "@/lib/i18n";
+import { LanguageSwitcher } from "./language-switcher";
+import { Logo } from "@/components/ui/logo";
 
 const socialLinks = [
   { icon: Github, href: "https://github.com/Entersolutions-io", label: "GitHub" },
 ];
 
 export function Footer() {
+  const { t } = useI18n();
+
+  const footerLinks = {
+    [t("Product", "Proizvod")]: [
+      { name: t("Features", "Značajke"), href: "#features" },
+      { name: t("How It Works", "Kako radi"), href: "#how-it-works" },
+      { name: "Demo", href: "/login?demo=true" },
+      { name: t("Changelog", "Promjene"), href: "/changelog" },
+    ],
+    [t("Resources", "Resursi")]: [
+      { name: t("Documentation", "Dokumentacija"), href: "/docs" },
+      { name: "API Reference", href: "/docs/api" },
+      { name: t("Developer Guide", "Vodič za programere"), href: "/docs/guide" },
+      { name: "Blog", href: "/blog" },
+      { name: "Status", href: "/status" },
+    ],
+    [t("Company", "Tvrtka")]: [
+      { name: t("About EnterSolutions", "O EnterSolutions"), href: "https://entersolutions.io" },
+      { name: t("Careers", "Karijere"), href: "https://entersolutions.io/careers" },
+      { name: t("Contact", "Kontakt"), href: "#contact" },
+      { name: t("Partners", "Partneri"), href: "/partners" },
+    ],
+    [t("Legal", "Pravno")]: [
+      { name: t("Privacy Policy", "Politika privatnosti"), href: "/privacy" },
+      { name: t("Terms of Service", "Uvjeti korištenja"), href: "/terms" },
+      { name: t("Cookie Policy", "Politika kolačića"), href: "/cookies" },
+      { name: t("GDPR Compliance", "GDPR usklađenost"), href: "/gdpr" },
+      { name: "DPA", href: "/dpa" },
+    ],
+  };
+
   return (
     <footer className="border-t border-white/[0.06] bg-[#050506]">
       <div className="mx-auto max-w-6xl px-6">
@@ -42,12 +49,12 @@ export function Footer() {
         <div className="py-16 grid grid-cols-1 lg:grid-cols-6 gap-12">
           {/* Brand column */}
           <div className="lg:col-span-2">
-            <span className="text-white font-semibold text-lg tracking-tight">
-              EnterCRM
-            </span>
+            <Logo height={24} />
             <p className="mt-4 text-sm text-[#71717A] leading-relaxed max-w-xs">
-              Enterprise-grade CRM platform with real-time tracking, smart
-              segmentation, and multi-channel automation.
+              {t(
+                "Enterprise-grade CRM platform with real-time tracking, smart segmentation, and multi-channel automation.",
+                "CRM platforma poslovne klase s praćenjem u stvarnom vremenu, pametnom segmentacijom i višekanalnom automatizacijom."
+              )}
             </p>
 
             {/* Contact info */}
@@ -115,11 +122,14 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="py-6 border-t border-white/[0.06] flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <LanguageSwitcher />
+            <p className="text-xs text-[#71717A]">
+              &copy; {new Date().getFullYear()} EnterSolutions. {t("All rights reserved.", "Sva prava pridržana.")}
+            </p>
+          </div>
           <p className="text-xs text-[#71717A]">
-            &copy; {new Date().getFullYear()} EnterSolutions. All rights reserved.
-          </p>
-          <p className="text-xs text-[#71717A]">
-            This website is a product of{" "}
+            {t("This website is a product of", "Ova web stranica je proizvod")}{" "}
             <a
               href="https://entersolutions.io"
               target="_blank"

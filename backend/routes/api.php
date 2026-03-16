@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Automations
     Route::apiResource('automations', AutomationController::class);
     Route::post('/automations/{automation}/toggle', [AutomationController::class, 'toggle']);
+    Route::post('/automations/{automation}/design', [AutomationController::class, 'saveDesign']);
 
     // API Keys
     Route::apiResource('api-keys', ApiKeyController::class)->except(['update']);

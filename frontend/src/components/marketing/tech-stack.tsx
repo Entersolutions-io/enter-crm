@@ -1,6 +1,7 @@
 "use client";
 
 import { ScrollReveal } from "@/components/effects/scroll-reveal";
+import { useI18n } from "@/lib/i18n";
 
 const technologies = [
   { name: "Google Cloud", slug: "googlecloud" },
@@ -37,13 +38,14 @@ function TechItem({ name, slug }: { name: string; slug: string }) {
 }
 
 export function TechStack() {
+  const { t } = useI18n();
   const doubled = [...technologies, ...technologies];
 
   return (
     <section className="relative py-20 overflow-hidden">
       <ScrollReveal>
         <p className="text-center text-sm text-[#71717A] font-medium tracking-wide uppercase mb-12">
-          Powered by industry-leading technology
+          {t("Powered by industry-leading technology", "Pokreće vodeća industrijska tehnologija")}
         </p>
       </ScrollReveal>
 

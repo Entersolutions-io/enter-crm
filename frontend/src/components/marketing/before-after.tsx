@@ -12,6 +12,7 @@ import {
   Target,
   Star,
 } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 function useRoundedMotionValue(mv: MotionValue<number>) {
   const [val, setVal] = useState(0);
@@ -20,6 +21,7 @@ function useRoundedMotionValue(mv: MotionValue<number>) {
 }
 
 export function BeforeAfter() {
+  const { t: tr } = useI18n();
   const sectionRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -89,19 +91,19 @@ export function BeforeAfter() {
         {/* Section header */}
         <div className="text-center mb-8">
           <p className="text-sm text-[#6366F1] font-semibold tracking-wide uppercase mb-3">
-            See The Difference
+            {tr("See The Difference", "Pogledajte razliku")}
           </p>
           <h2
             className="text-3xl md:text-4xl font-semibold text-[#FAFAFA] tracking-tight"
             style={{ letterSpacing: "-0.02em" }}
           >
-            One customer, transformed
+            {tr("One customer, transformed", "Jedan kupac, transformiran")}
           </h2>
         </div>
 
         {/* Scroll progress indicator */}
         <div className="flex items-center gap-3 mb-6">
-          <span className="text-[11px] text-[#71717A] font-medium">{progressLabel}</span>
+          <span className="text-[11px] text-[#71717A] font-medium">{tr(progressLabel, progressLabel === "Without CRM" ? "Bez CRM-a" : progressLabel === "Getting started..." ? "Početak..." : progressLabel === "Growing with CRM" ? "Rast s CRM-om" : "Puna snaga")}</span>
           <div className="w-32 h-1 rounded-full bg-white/[0.06] overflow-hidden">
             <motion.div
               className="h-full rounded-full bg-[#6366F1]"
@@ -228,7 +230,7 @@ export function BeforeAfter() {
           className="mt-6 text-[11px] text-[#52525B]"
           style={{ opacity: useTransform(t, [0, 0.15], [1, 0]) }}
         >
-          Scroll to see the transformation
+          {tr("Scroll to see the transformation", "Skrolajte da vidite transformaciju")}
         </motion.p>
       </div>
     </section>

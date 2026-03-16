@@ -1,15 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Mail, MessageSquare, Phone, Send } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Plus, Mail, MessageSquare, Phone, Send, Megaphone } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { api } from "@/lib/api";
 
 interface Campaign {
-  id: string;
+  id: number;
   name: string;
-  type: "email" | "sms" | "call_list";
+  type: "email" | "sms" | "call_list" | "ads";
   status: "draft" | "scheduled" | "sending" | "sent" | "paused";
+  ad_platform: string | null;
+  impressions: number;
+  clicks: number;
+  ad_spend: number;
   subject: string | null;
   total_sent: number;
   total_opened: number;
@@ -19,7 +24,7 @@ interface Campaign {
   created_at: string;
 }
 
-const typeIcons = { email: Mail, sms: MessageSquare, call_list: Phone };
+const typeIcons = { email: Mail, sms: MessageSquare, call_list: Phone, ads: Megaphone };
 const statusColors: Record<string, string> = {
   draft: "bg-[#1F1F23] text-[#71717A] border-[#2A2A2E]",
   scheduled: "bg-blue-400/10 text-blue-400 border-blue-400/20",
@@ -29,6 +34,7 @@ const statusColors: Record<string, string> = {
 };
 
 export default function CampaignsPage() {
+  const router = useRouter();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -50,7 +56,10 @@ export default function CampaignsPage() {
             Create and manage outreach campaigns
           </p>
         </div>
-        <button className="h-9 px-4 rounded-lg bg-[#6366F1] hover:bg-[#5558E6] text-white text-sm font-medium transition-colors flex items-center gap-2">
+        <button
+          onClick={() => router.push("/dashboard/campaigns/new")}
+          className="h-9 px-4 rounded-lg bg-[#6366F1] hover:bg-[#5558E6] text-white text-sm font-medium transition-colors flex items-center gap-2"
+        >
           <Plus className="h-4 w-4" />
           New Campaign
         </button>
@@ -72,6 +81,13 @@ export default function CampaignsPage() {
           </div>
           <p className="text-sm text-[#71717A]">No campaigns yet</p>
           <p className="text-xs text-[#52525B] mt-1">Create your first campaign to reach customers</p>
+          <button
+            onClick={() => router.push("/dashboard/campaigns/new")}
+            className="mt-4 h-9 px-4 rounded-lg bg-[#6366F1] hover:bg-[#5558E6] text-white text-sm font-medium transition-colors flex items-center gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            Create Campaign
+          </button>
         </div>
       ) : (
         <div className="space-y-3">
@@ -80,6 +96,7 @@ export default function CampaignsPage() {
             return (
               <div
                 key={campaign.id}
+                onClick={() => router.push(`/dashboard/campaigns/${campaign.id}`)}
                 className="rounded-xl border border-[#1F1F23] bg-[#111113] p-5 hover:border-[#2A2A2E] transition-colors cursor-pointer"
               >
                 <div className="flex items-center justify-between">
@@ -96,9 +113,19 @@ export default function CampaignsPage() {
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="hidden sm:flex items-center gap-4 text-xs text-[#52525B]">
-                      <span className="tabular-nums">{campaign.total_sent.toLocaleString()} sent</span>
-                      <span className="tabular-nums">{campaign.total_opened.toLocaleString()} opened</span>
-                      <span className="tabular-nums">{campaign.total_clicked.toLocaleString()} clicked</span>
+                      {campaign.type === "ads" ? (
+                        <>
+                          <span className="tabular-nums">{(campaign.impressions || 0).toLocaleString()} impr.</span>
+                          <span className="tabular-nums">{(campaign.clicks || 0).toLocaleString()} clicks</span>
+                          <span className="tabular-nums">€{Number(campaign.ad_spend || 0).toFixed(0)} spent</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="tabular-nums">{campaign.total_sent.toLocaleString()} sent</span>
+                          <span className="tabular-nums">{campaign.total_opened.toLocaleString()} opened</span>
+                          <span className="tabular-nums">{campaign.total_clicked.toLocaleString()} clicked</span>
+                        </>
+                      )}
                     </div>
                     <Badge variant="outline" className={`text-[10px] uppercase tracking-wider ${statusColors[campaign.status] || ""}`}>
                       {campaign.status}
